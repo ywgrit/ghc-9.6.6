@@ -206,11 +206,11 @@ cmmMetaLlvmPrelude = do
 
   platform <- getPlatform
   cfg <- getConfig
-  let stack_alignment_metas =
+  let codel_model_metas =
           case platformArch platform of
-            ArchX86_64 | llvmCgAvxEnabled cfg -> [mkStackAlignmentMeta 32]
+            ArchLoongArch64 -> [mkCodelModelMeta 3]
             _                                 -> []
-  module_flags_metas <- mkModuleFlagsMeta stack_alignment_metas
+  module_flags_metas <- mkModuleFlagsMeta codel_model_metas
   let metas = tbaa_metas ++ module_flags_metas
   cfg <- getConfig
   renderLlvm $ ppLlvmMetas cfg metas
@@ -228,9 +228,10 @@ mkModuleFlagsMeta :: [ModuleFlag] -> LlvmM [MetaDecl]
 mkModuleFlagsMeta =
     mkNamedMeta "llvm.module.flags" . map moduleFlagToMetaExpr
 
-mkStackAlignmentMeta :: Integer -> ModuleFlag
-mkStackAlignmentMeta alignment =
-    ModuleFlag MFBError "override-stack-alignment" (MetaLit $ LMIntLit alignment i32)
+-- Pass -mcmodel=medium option to LLVM backend on LoongArch64
+mkCodelModelMeta :: Integer -> ModuleFlag
+mkCodelModelMeta codemodel =
+    ModuleFlag MFBError "Code Model" (MetaLit $ LMIntLit codemodel i32)
 
 
 -- -----------------------------------------------------------------------------
