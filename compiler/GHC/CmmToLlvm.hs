@@ -208,7 +208,8 @@ cmmMetaLlvmPrelude = do
   cfg <- getConfig
   let codel_model_metas =
           case platformArch platform of
-            ArchLoongArch64 -> [mkCodelModelMeta 3]
+            -- FIXME: We should not rely on LLVM
+            ArchLoongArch64 -> [mkCodelModelMeta CMMedium]
             _                                 -> []
   module_flags_metas <- mkModuleFlagsMeta codel_model_metas
   let metas = tbaa_metas ++ module_flags_metas
@@ -228,10 +229,15 @@ mkModuleFlagsMeta :: [ModuleFlag] -> LlvmM [MetaDecl]
 mkModuleFlagsMeta =
     mkNamedMeta "llvm.module.flags" . map moduleFlagToMetaExpr
 
--- Pass -mcmodel=medium option to LLVM backend on LoongArch64
-mkCodelModelMeta :: Integer -> ModuleFlag
-mkCodelModelMeta codemodel =
-    ModuleFlag MFBError "Code Model" (MetaLit $ LMIntLit codemodel i32)
+-- LLVM's @LLVM::CodeModel::Model@ enumeration
+data CodeModel = CMMedium
+
+-- Pass -mcmodel=medium option to LLVM on LoongArch64
+mkCodeModelMeta :: CodeModel -> ModuleFlag
+mkCodeModelMeta codemodel =
+    ModuleFlag MFBError "Code Model" (MetaLit $ LMIntLit n i32)
+  where
+    n = case codemodel of CMMedium -> 3 -- as of LLVM 8
 
 
 -- -----------------------------------------------------------------------------
