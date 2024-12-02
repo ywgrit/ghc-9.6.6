@@ -206,12 +206,12 @@ cmmMetaLlvmPrelude = do
 
   platform <- getPlatform
   cfg <- getConfig
-  let codel_model_metas =
+  let code_model_metas =
           case platformArch platform of
             -- FIXME: We should not rely on LLVM
-            ArchLoongArch64 -> [mkCodelModelMeta CMMedium]
+            ArchLoongArch64 -> [mkCodeModelMeta CMMedium]
             _                                 -> []
-  module_flags_metas <- mkModuleFlagsMeta codel_model_metas
+  module_flags_metas <- mkModuleFlagsMeta code_model_metas
   let metas = tbaa_metas ++ module_flags_metas
   cfg <- getConfig
   renderLlvm $ ppLlvmMetas cfg metas
