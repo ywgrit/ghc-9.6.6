@@ -1,4 +1,4 @@
-From 49080f5b0cdefe87e8449ac848170f9cf7b58274 Mon Sep 17 00:00:00 2001
+From 5880fff6d353a14785c457999fded5a7100c9514 Mon Sep 17 00:00:00 2001
 From: Wang Xin <wangxin03@loongson.cn>
 Date: Fri, 13 Dec 2024 03:47:29 +0000
 Subject: [PATCH] llvmGen: Allow LlvmLits in MetaExprs

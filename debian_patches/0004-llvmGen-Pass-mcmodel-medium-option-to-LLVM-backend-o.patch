@@ -1,4 +1,4 @@
-From b2df305808c158d1d1eedc88771305a3028bec81 Mon Sep 17 00:00:00 2001
+From e70d41406b5d5638b42c4d8222cd03e76bbfeb86 Mon Sep 17 00:00:00 2001
 From: Xin Wang <wangxin03@loongson.cn>
 Date: Mon, 13 Dec 2024 10:45:20 +0800
 Subject: [PATCH] llvmGen: Pass mcmodel medium option to LLVM backend on LoongArch
